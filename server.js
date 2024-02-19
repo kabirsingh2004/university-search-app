@@ -13,7 +13,6 @@ const pool = mysql.createPool(settings.Database);
 // Set up middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static("public"));
 app.set("view engine", "ejs");
 app.use(cors());
 
@@ -23,13 +22,22 @@ app.get("/", (req, res) => {
 });
 
 app.post("/search", async (req, res) => {
-  const { searchQuery } = req.body;
+  try {
+    const { searchQuery } = req.body;
 
-  const { data } = await axios.get(
-    `${BASE_URL}/search?name=${searchQuery}&country=India`
-  );
+    if (!searchQuery) {
+      return res.status(400).send("Search query is required");
+    }
 
-  res.render("search-results", { universities: data });
+    const { data } = await axios.get(
+      `${BASE_URL}/search?name=${searchQuery}&country=India`
+    );
+
+    res.render("search-results", { universities: data });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
 });
 
 app.get("/favorites", async (req, res) => {
@@ -46,9 +54,9 @@ app.get("/favorites", async (req, res) => {
 });
 
 app.post("/favorite", async (req, res) => {
-  const { universityId, name, stateProvince, country, url } = req.body;
-
   try {
+    const { universityId, name, stateProvince, country, url } = req.body;
+
     // Check if the table exists
     const [tables] = await pool.query("SHOW TABLES LIKE 'Universities'");
 
@@ -89,8 +97,6 @@ app.post("/favorite", async (req, res) => {
         `${name} is already in favorites <a href="/favorites">Go To Favorites </a>.`
       );
     }
-
-    // res.redirect("/favorites");
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
