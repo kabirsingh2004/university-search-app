@@ -61,7 +61,6 @@ app.post("/favorite", async (req, res) => {
     const [tables] = await pool.query("SHOW TABLES LIKE 'Universities'");
 
     if (tables.length === 0) {
-      // If the table doesn't exist, create it
       await pool.query(`
         CREATE TABLE Universities (
           id INT AUTO_INCREMENT PRIMARY KEY,
@@ -83,7 +82,6 @@ app.post("/favorite", async (req, res) => {
     );
 
     if (!existingUniversity.length) {
-      // University not in favorites, proceed with INSERT or UPDATE
       await pool.query(
         "INSERT INTO Universities (universityId, name, stateProvince, country, isFavorite, url) VALUES (?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE isFavorite = ?",
         [universityId, name, stateProvince, country, true, url, true]
