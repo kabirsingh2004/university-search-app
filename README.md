@@ -17,7 +17,6 @@ University Search App is a web application that allows users to search for unive
 - Search for universities in India.
 - View search results with details like name, state/province, and web pages.
 - Mark universities as favorites and view them in a separate page.
-- Responsive design for both desktop and mobile devices.
 
 ## Technologies
 
