@@ -44,7 +44,23 @@ University Search App is a web application that allows users to search for unive
 
 3. Set up the database:
 
-   - Create a MySQL database and update the database configuration in `server.js`.
+   - Create a MySQL database and update the database configuration in `settings.js`.
+
+   ```js
+   export default {
+     Port: process.env.PORT || 3000,
+     BaseUrl: `http://universities.hipolabs.com`,
+     Database: {
+       host: "localhost",
+       user: "root",
+       password: "password",
+       database: "university_db",
+       waitForConnections: true,
+       connectionLimit: 10,
+       queueLimit: 0,
+     },
+   };
+   ```
 
 4. Run the application:
 
@@ -52,7 +68,7 @@ University Search App is a web application that allows users to search for unive
    node server.js
    ```
 
-   The server will start on http://localhost:3000.
+The server will start on http://localhost:3000.
 
 ## Usage
 

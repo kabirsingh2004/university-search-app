@@ -2,21 +2,13 @@ import express from "express";
 import mysql from "mysql2/promise";
 import cors from "cors";
 import axios from "axios";
+import settings from "./settings.js";
 
 const app = express();
-const PORT = process.env.PORT || 3000;
-const BASE_URL = `http://universities.hipolabs.com`;
+const BASE_URL = settings.BaseUrl;
 
 // Database Configuration
-const pool = mysql.createPool({
-  host: "localhost",
-  user: "root",
-  password: "Kabir@315116",
-  database: "university_db",
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0,
-});
+const pool = mysql.createPool(settings.Database);
 
 // Set up middleware
 app.use(express.json());
@@ -89,9 +81,13 @@ app.post("/favorite", async (req, res) => {
         [universityId, name, stateProvince, country, true, url, true]
       );
 
-      return res.send(`Marked ${name} as a favorite.`);
+      return res.send(
+        `Marked ${name} as a favorite <a href="/favorites">Go To Favorites </a>.`
+      );
     } else {
-      return res.send(`${name} is already in favorites.`);
+      return res.send(
+        `${name} is already in favorites <a href="/favorites">Go To Favorites </a>.`
+      );
     }
 
     // res.redirect("/favorites");
@@ -101,6 +97,6 @@ app.post("/favorite", async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+app.listen(settings.Port, () => {
+  console.log(`Server is running on http://localhost:${settings.Port}`);
 });
