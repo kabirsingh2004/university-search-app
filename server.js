@@ -33,7 +33,11 @@ app.post("/search", async (req, res) => {
       `${BASE_URL}/search?name=${searchQuery}&country=India`
     );
 
-    res.render("search-results", { universities: data });
+    if (!data.length) {
+      return res.send("No results found");
+    }
+
+    res.render("search-results", { universities: data || [] });
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
@@ -46,7 +50,8 @@ app.get("/favorites", async (req, res) => {
       "SELECT * FROM Universities WHERE isFavorite = ?",
       [true]
     );
-    res.render("favorites", { favorites });
+    if (!favorites.length) return res.send("No favorites found");
+    res.render("favorites", { favorites: favorites });
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");

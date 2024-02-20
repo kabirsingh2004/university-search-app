@@ -4,7 +4,7 @@ export default {
   Database: {
     host: "localhost",
     user: "root",
-    password: "passoword",
+    password: "Kabir@315116",
     database: "university_db",
     waitForConnections: true,
     connectionLimit: 10,
